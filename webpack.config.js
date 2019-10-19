@@ -15,6 +15,14 @@ const config = {
 
     //入口， __dirname 是当前文件所在目录
     entry: path.join(__dirname, 'src/index.js'),
+
+    //区分打包类库代码 -- 失败
+    optimization: {
+        splitChunks: {
+            chunks: 'initial'
+        }
+    },
+
     //输出
     output: {
         filename: 'bundle.[hash:8].js',
@@ -96,6 +104,10 @@ if(isDev){
         new webpack.NoEmitOnErrorsPlugin()
     )
 }else{
+    //在webpack4中删除了原来的CommonsChunkPlugin插件,内部集成的optimization.splitChunks选项可以直接进行代码分离.
+    
+
+    //生产环境 css、js文件单独打包
     config.output.filename = '[name].[chunkhash:8].js'
     config.module.rules.push(
         {
@@ -116,7 +128,8 @@ if(isDev){
         },
     )
     config.plugins.push(
-        new ExtractPlugin('styles.[md5:contenthash:hex:8].css')
+        //new ExtractPlugin('styles.[contentHash:8].css')
+        new ExtractPlugin('styles.[md5:contenthash:hex:8].css'),
     )
 }
 

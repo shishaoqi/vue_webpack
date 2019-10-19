@@ -5,6 +5,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const HTMLPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const ExtractPlugin = require('extract-text-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -16,7 +17,7 @@ const config = {
     entry: path.join(__dirname, 'src/index.js'),
     //输出
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[hash:8].js',
         path: path.join(__dirname, 'dist')
     },
     plugins: [
@@ -39,27 +40,6 @@ const config = {
                 test: /\.jsx$/,
                 loader: 'babel-loader'
             },
-            {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                ]
-            },
-            {
-                test: /\.styl/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true,
-                        }
-                    },
-                    'stylus-loader'
-                ]
-            },
             //将小于1024d的图片转为base64，减少http请求
             {
                 test: /\.(gif|jpg|jpeg|png|svg)$/,
@@ -79,6 +59,22 @@ const config = {
 
 // 由于加入webpack-dev-server，要应对不同环境变量
 if(isDev){
+    //开发环境 styl 的配置
+    config.module.rules.push({
+        test: /\.styl/,
+        use: [
+            'style-loader',
+            'css-loader',
+            {
+                loader: 'postcss-loader',
+                options: {
+                    sourceMap: true,
+                }
+            },
+            'stylus-loader'
+        ]
+    })
+
     //让浏览器显示正常代码
     config.devtool = "#cheap-module-eval-source-map",
     
@@ -98,6 +94,29 @@ if(isDev){
     config.plugins.push(
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
+    )
+}else{
+    config.output.filename = '[name].[chunkhash:8].js'
+    config.module.rules.push(
+        {
+            test: /\.styl/,
+            use: ExtractPlugin.extract({
+                fallback: 'style-loader',
+                use: [
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                        }
+                    },
+                    'stylus-loader'
+                ]
+            })
+        },
+    )
+    config.plugins.push(
+        new ExtractPlugin('styles.[md5:contenthash:hex:8].css')
     )
 }
 

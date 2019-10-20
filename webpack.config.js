@@ -16,18 +16,20 @@ const config = {
     //入口， __dirname 是当前文件所在目录
     entry: path.join(__dirname, 'src/index.js'),
 
-    //区分打包类库代码 -- 失败
-    optimization: {
-        splitChunks: {
-            chunks: 'initial'
-        }
-    },
-
     //输出
     output: {
         filename: 'bundle.[hash:8].js',
         path: path.join(__dirname, 'dist')
     },
+
+    //区分打包类库代码
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        },
+        runtimeChunk: true
+    },
+
     plugins: [
         // make sure to include the plugin for the magic
         new VueLoaderPlugin(),
@@ -101,7 +103,7 @@ if(isDev){
     //针对 hot: true 加入的
     config.plugins.push(
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin()
+        //new webpack.NoEmitOnErrorsPlugin() //webpack4 中取消掉了
     )
 }else{
     //在webpack4中删除了原来的CommonsChunkPlugin插件,内部集成的optimization.splitChunks选项可以直接进行代码分离.

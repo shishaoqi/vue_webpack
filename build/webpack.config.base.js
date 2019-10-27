@@ -1,7 +1,10 @@
 const path = require('path')
+const createVueLoaderOptions = require('./vue-loader.config')
 
 //高版本必加项
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+const isDev = process.env.NODE_ENV === 'development';
 
 const config = {
     //使生成的bundle.js不被压缩
@@ -32,7 +35,8 @@ const config = {
         rules: [
             {
               test: /\.vue$/,
-              loader: 'vue-loader'
+              loader: 'vue-loader',
+              options: createVueLoaderOptions(isDev)
             },
             {
               test: /\.jsx$/,

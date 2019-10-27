@@ -47,19 +47,17 @@ if(isDev){
       rules: [
         {
           test: /\.styl/,
-          use: ExtractPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              'css-loader',
-              {
-                loader: 'postcss-loader',
-                options: {
-                  sourceMap: true,
-                }
-              },
-              'stylus-loader'
-            ]
-          })
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true,
+              }
+            },
+            'stylus-loader'
+          ]
         }
       ]
     },
@@ -81,7 +79,7 @@ if(isDev){
         {
           test: /\.styl/,
           use: ExtractPlugin.extract({
-            fallback: 'style-loader',
+            fallback: 'vue-style-loader',
             use: [
               'css-loader',
               {

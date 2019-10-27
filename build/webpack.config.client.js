@@ -35,7 +35,6 @@ let config
 // 由于加入webpack-dev-server，要应对不同环境变量
 if(isDev){
   config = merge(baseConfig, {
-    entry: path.join(__dirname, '../src/index.js'),
     output: {
       //filename: '[name].[chunkhash:8].js', //生产环境 css、js文件单独打包
       filename: isDev ? '[name].[hash:8].js' : '[name].[chunkHash:8].js', //生产环境 css、js文件单独打包
@@ -72,7 +71,6 @@ if(isDev){
   })
 }else{
   config = merge(baseConfig, {
-    entry: path.join(__dirname, '../src/index.js'),
     output: {
       //filename: '[name].[chunkhash:8].js', //生产环境 css、js文件单独打包
       filename: isDev ? '[name].[hash:8].js' : '[name].[chunkHash:8].js', //生产环境 css、js文件单独打包

@@ -38,7 +38,7 @@ if(isDev){
     output: {
       //filename: '[name].[chunkhash:8].js', //生产环境 css、js文件单独打包
       filename: isDev ? '[name].[hash:8].js' : '[name].[chunkHash:8].js', //生产环境 css、js文件单独打包
-      path: path.join(__dirname, 'dist')
+      path: path.join(__dirname, '../dist')
     },
     //让浏览器显示正常代码
     devtool: "#cheap-module-eval-source-map",
@@ -74,7 +74,7 @@ if(isDev){
     output: {
       //filename: '[name].[chunkhash:8].js', //生产环境 css、js文件单独打包
       filename: isDev ? '[name].[hash:8].js' : '[name].[chunkHash:8].js', //生产环境 css、js文件单独打包
-      path: path.join(__dirname, 'dist')
+      path: path.join(__dirname, '../dist')
     },
     module: {
       rules: [
